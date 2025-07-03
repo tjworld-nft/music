@@ -210,6 +210,26 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    animation: background-shift 30s infinite ease-in-out;
+}
+
+@keyframes background-shift {
+    0%, 100% {
+        background-position: center center;
+        background-size: 100% 100%;
+    }
+    25% {
+        background-position: 52% 48%;
+        background-size: 105% 105%;
+    }
+    50% {
+        background-position: 48% 52%;
+        background-size: 110% 110%;
+    }
+    75% {
+        background-position: 52% 48%;
+        background-size: 105% 105%;
+    }
 }
 
 .hero-overlay {
@@ -220,13 +240,151 @@ body {
     height: 100%;
     background: linear-gradient(180deg, rgba(6, 23, 47, 0.3) 0%, rgba(9, 39, 82, 0.6) 100%);
     z-index: 1;
+    animation: ocean-flow 20s infinite ease-in-out;
+}
+
+@keyframes ocean-flow {
+    0%, 100% {
+        background: linear-gradient(180deg, rgba(6, 23, 47, 0.3) 0%, rgba(9, 39, 82, 0.6) 100%);
+    }
+    25% {
+        background: linear-gradient(200deg, rgba(6, 23, 47, 0.4) 0%, rgba(9, 39, 82, 0.5) 100%);
+    }
+    50% {
+        background: linear-gradient(160deg, rgba(6, 23, 47, 0.2) 0%, rgba(9, 39, 82, 0.7) 100%);
+    }
+    75% {
+        background: linear-gradient(220deg, rgba(6, 23, 47, 0.5) 0%, rgba(9, 39, 82, 0.4) 100%);
+    }
+}
+
+/* 浮遊する泡エフェクト */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(51, 213, 255, 0.1) 2px, transparent 2px),
+        radial-gradient(circle, rgba(79, 124, 255, 0.08) 1px, transparent 1px),
+        radial-gradient(circle, rgba(51, 213, 255, 0.06) 3px, transparent 3px);
+    background-size: 150px 200px, 80px 120px, 200px 300px;
+    background-position: 0 0, 50px 60px, 130px 200px;
+    animation: bubbles-float 15s infinite linear;
+    z-index: 2;
+    pointer-events: none;
+}
+
+@keyframes bubbles-float {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 波の動きエフェクト */
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    width: 120%;
+    height: 100px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(51, 213, 255, 0.1) 25%, 
+        rgba(79, 124, 255, 0.15) 50%, 
+        rgba(51, 213, 255, 0.1) 75%, 
+        transparent 100%);
+    border-radius: 50% 50% 0 0;
+    animation: wave-motion 8s infinite ease-in-out;
+    z-index: 2;
+    pointer-events: none;
+}
+
+@keyframes wave-motion {
+    0%, 100% {
+        transform: translateX(-10%) rotate(0deg);
+    }
+    50% {
+        transform: translateX(10%) rotate(2deg);
+    }
 }
 
 .hero-content {
     text-align: center;
     color: var(--color-white);
-    z-index: 2;
+    z-index: 3;
     position: relative;
+}
+
+/* 追加の粒子エフェクト */
+.hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero-particles::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        radial-gradient(circle, rgba(51, 213, 255, 0.05) 2px, transparent 2px);
+    background-size: 100px 150px, 200px 250px;
+    background-position: 0 0, 100px 50px;
+    animation: particles-drift 25s infinite linear;
+}
+
+.hero-particles::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(79, 124, 255, 0.08) 1.5px, transparent 1.5px);
+    background-size: 180px 220px;
+    background-position: 50px 100px;
+    animation: particles-drift 20s infinite linear reverse;
+}
+
+@keyframes particles-drift {
+    0% {
+        transform: translateY(100vh) translateX(-50px);
+        opacity: 0;
+    }
+    5% {
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(50px);
+        opacity: 0;
+    }
 }
 
 .hero-title {
@@ -347,6 +505,7 @@ body {
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 3;
 }
 
 .scroll-arrow {
@@ -356,7 +515,19 @@ body {
     border-top: none;
     border-right: none;
     transform: rotate(-45deg);
-    animation: bounce 2s infinite;
+    animation: bounce 2s infinite, glow-pulse 3s infinite;
+    box-shadow: 0 0 10px rgba(51, 213, 255, 0.3);
+}
+
+@keyframes glow-pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(51, 213, 255, 0.3);
+        border-color: var(--color-white);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(51, 213, 255, 0.6);
+        border-color: var(--accent);
+    }
 }
 
 @keyframes bounce {
