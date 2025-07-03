@@ -250,6 +250,16 @@ body {
     color: transparent;
     text-shadow: 0 0 20px rgba(51, 213, 255, 0.5);
     margin-bottom: 20px;
+    animation: text-glow 2s infinite alternate;
+}
+
+@keyframes text-glow {
+    0% {
+        text-shadow: 0 0 20px rgba(51, 213, 255, 0.5);
+    }
+    100% {
+        text-shadow: 0 0 30px rgba(51, 213, 255, 0.8), 0 0 40px rgba(79, 124, 255, 0.4);
+    }
 }
 
 /* ---- サブタイトルのスタイル微調整 ---- */
@@ -288,11 +298,33 @@ body {
     backdrop-filter: blur(10px);
     border: 2px solid rgba(51, 213, 255, 0.3);
     box-shadow: var(--neon-glow);
+    animation: button-pulse 3s infinite;
 }
 
 .listen-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: button-beat 0.6s infinite;
+}
+
+@keyframes button-pulse {
+    0%, 100% {
+        border-color: rgba(51, 213, 255, 0.3);
+        box-shadow: var(--neon-glow);
+    }
+    50% {
+        border-color: rgba(51, 213, 255, 0.5);
+        box-shadow: 0 0 30px rgba(51, 213, 255, 0.4);
+    }
+}
+
+@keyframes button-beat {
+    0%, 100% {
+        transform: translateY(-3px) scale(1);
+    }
+    50% {
+        transform: translateY(-5px) scale(1.03);
+    }
 }
 
 .listen-btn.spotify:hover {
@@ -339,6 +371,15 @@ body {
     }
 }
 
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
 /* Sections */
 section {
     padding: 80px 0;
@@ -352,6 +393,16 @@ section {
     font-weight: 600;
     text-shadow: var(--neon-glow);
     position: relative;
+    animation: title-pulse 4s infinite ease-in-out;
+}
+
+@keyframes title-pulse {
+    0%, 100% {
+        text-shadow: var(--neon-glow);
+    }
+    50% {
+        text-shadow: 0 0 30px rgba(51, 213, 255, 0.5), 0 0 40px rgba(79, 124, 255, 0.3);
+    }
 }
 
 .section-title::after {
@@ -385,6 +436,16 @@ section {
 .spotify-embed:hover {
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(51, 213, 255, 0.4);
     transform: translateY(-2px);
+    animation: embed-pulse 1s infinite;
+}
+
+@keyframes embed-pulse {
+    0%, 100% {
+        transform: translateY(-2px) scale(1);
+    }
+    50% {
+        transform: translateY(-4px) scale(1.01);
+    }
 }
 
 .spotify-embed iframe {
@@ -722,20 +783,31 @@ section {
     justify-content: center;
 }
 
+
+.about-img img:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 30px rgba(51, 213, 255, 0.4);
+    animation: float 2s infinite ease-in-out;
+}
+
 .about-img img {
     max-width: 320px;
     width: 100%;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), var(--neon-glow);
     transition: all 0.3s ease;
-    /* 背景透過画像に最適化 */
     background: linear-gradient(135deg, rgba(51, 213, 255, 0.05) 0%, rgba(79, 124, 255, 0.05) 100%);
     backdrop-filter: blur(2px);
+    animation: gentle-glow 3s infinite ease-in-out;
 }
 
-.about-img img:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 30px rgba(51, 213, 255, 0.4);
+@keyframes gentle-glow {
+    0%, 100% {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), var(--neon-glow);
+    }
+    50% {
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3), 0 0 25px rgba(51, 213, 255, 0.35);
+    }
 }
 
 .about-text {
@@ -795,15 +867,42 @@ section {
     position: relative;
 }
 
-/* 波紋アニメ */
+/* 波紋アニメ - より強化されたビート感 */
 @keyframes ripple {
     0% {
-        opacity: 0.25;
+        opacity: 0.4;
         transform: scale(0);
+    }
+    30% {
+        opacity: 0.8;
+        transform: scale(1.2);
     }
     100% {
         opacity: 0;
         transform: scale(4);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+@keyframes beat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.05);
+    }
+    75% {
+        transform: scale(0.95);
     }
 }
 
@@ -814,10 +913,26 @@ section {
     left: 50%;
     width: 120px;
     height: 120px;
-    border: 2px solid rgba(79, 124, 255, 0.4);
+    border: 2px solid rgba(79, 124, 255, 0.6);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    animation: ripple 6s infinite;
+    animation: ripple 3s infinite, pulse 2s infinite;
+    pointer-events: none;
+    z-index: -1;
+    box-shadow: 0 0 20px rgba(79, 124, 255, 0.3);
+}
+
+.music-grid::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(51, 213, 255, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: ripple 2s infinite 0.5s, beat 1.5s infinite;
     pointer-events: none;
     z-index: -1;
 }
@@ -832,11 +947,31 @@ section {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid rgba(51, 213, 255, 0.2);
     backdrop-filter: blur(10px);
+    animation: subtle-pulse 4s infinite;
 }
 
 .album-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), var(--neon-glow);
+    animation: hover-beat 0.8s infinite;
+}
+
+@keyframes subtle-pulse {
+    0%, 100% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    50% {
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 15px rgba(51, 213, 255, 0.2);
+    }
+}
+
+@keyframes hover-beat {
+    0%, 100% {
+        transform: translateY(-10px) scale(1);
+    }
+    50% {
+        transform: translateY(-12px) scale(1.02);
+    }
 }
 
 .album-cover {
@@ -1030,6 +1165,16 @@ section {
     color: #fff;
     transform: translateY(-6px) scale(1.07);
     box-shadow: 0 0 12px 4px rgba(51, 213, 255, .6), 0 0 24px 8px rgba(51, 213, 255, .3) inset;
+    animation: social-beat 0.5s infinite;
+}
+
+@keyframes social-beat {
+    0%, 100% {
+        transform: translateY(-6px) scale(1.07);
+    }
+    50% {
+        transform: translateY(-8px) scale(1.1);
+    }
 }
 
 @media(max-width: 600px) {
