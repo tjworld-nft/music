@@ -444,6 +444,17 @@ section {
     background: linear-gradient(135deg, #33d5ff 0%, #6b9eff 100%);
 }
 
+.suno-btn.amazon-style {
+    background: linear-gradient(135deg, #FF9900 0%, #FF7700 100%);
+    box-shadow: 0 0 20px rgba(255, 153, 0, 0.3);
+}
+
+.suno-btn.amazon-style:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(255, 153, 0, 0.6);
+    background: linear-gradient(135deg, #FFAA00 0%, #FF8800 100%);
+}
+
 .amazon-btn {
     display: inline-flex;
     align-items: center;

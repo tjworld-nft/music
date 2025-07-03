@@ -8,6 +8,7 @@ const albumData = [
         streamingLinks: {
             spotify: "https://open.spotify.com/intl-ja/album/7e4515POUooa6qcELXusMr",
             appleMusic: "https://music.apple.com/us/album/dive-drive-collection/1821436814",
+            amazonMusic: "https://music.amazon.co.jp/albums/B0FDKRHDN8",
             sunoAI: "https://suno.ai/playlist/tj-dive-drive-collection"
         }
     },
@@ -19,6 +20,7 @@ const albumData = [
         streamingLinks: {
             spotify: "https://open.spotify.com/intl-ja/album/2sdUIAIK77Ssz9KQdXlGLN?utm_campaign=website&utm_medium=Email+&utm_source=SendGrid",
             appleMusic: "#",
+            amazonMusic: "https://music.amazon.co.jp/albums/B0FF4LTJ9Y",
             sunoAI: "https://suno.com/playlist/888888c4-2fab-47dd-ad43-11410c0ea1eb"
         }
     }
@@ -72,6 +74,10 @@ function generateAlbumCards() {
                 <a href="${album.streamingLinks.appleMusic}" target="_blank" class="streaming-link">
                     <i class="fab fa-apple"></i>
                     <span>Apple Music</span>
+                </a>
+                <a href="${album.streamingLinks.amazonMusic}" target="_blank" class="streaming-link">
+                    <i class="fab fa-amazon"></i>
+                    <span>Amazon Music</span>
                 </a>
                 <a href="${album.streamingLinks.sunoAI}" target="_blank" class="streaming-link">
                     <i class="fas fa-music"></i>
