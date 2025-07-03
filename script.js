@@ -51,6 +51,7 @@ function generateAlbumCards() {
     albumsContainer.innerHTML = '';
     
     albumData.forEach(album => {
+        console.log('Album:', album.title, 'Amazon Music:', album.streamingLinks.amazonMusic);
         const albumCard = document.createElement('div');
         albumCard.className = 'album-card';
         
@@ -75,7 +76,7 @@ function generateAlbumCards() {
                     <i class="fab fa-apple"></i>
                     <span>Apple Music</span>
                 </a>
-                <a href="${album.streamingLinks.amazonMusic}" target="_blank" class="streaming-link">
+                <a href="${album.streamingLinks.amazonMusic}" target="_blank" class="streaming-link amazon">
                     <i class="fab fa-amazon"></i>
                     <span>Amazon Music</span>
                 </a>

@@ -895,6 +895,13 @@ section {
     transform: translateY(-2px);
 }
 
+.streaming-link.amazon:hover {
+    background: linear-gradient(135deg, #FF9900 0%, #FF7700 100%);
+    color: white;
+    box-shadow: 0 0 20px rgba(255, 153, 0, 0.3);
+    border-color: #FF9900;
+}
+
 .btn.presave {
     background: linear-gradient(90deg, #ff8a00, #ff3d00);
     color: #fff;
