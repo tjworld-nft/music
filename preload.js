@@ -6,10 +6,10 @@ let prog = 0;
 
 // Preload critical images first
 const imagesToPreload = [
-    'image/tj-hero.png',
+    'image/tj-hero-v2.jpg',
     'image/ddc-cover.jpg.jpg',
     'image/Certification Symphony-cover.jpg',
-    'image/kuragejyoshi-toka.png'
+    'image/tj-about-portrait.png'
 ];
 
 let loadedImages = 0;
@@ -30,8 +30,8 @@ imagesToPreload.forEach(src => {
 const timer = setInterval(() => {
     // Combine image loading progress with artificial progress
     const imageProgress = (loadedImages / totalImages) * 50; // Up to 50%
-    const artificialProgress = prog + Math.random() * 1.5 + 0.8; // Slower increment
-    
+    const artificialProgress = prog + Math.random() * 4 + 3; // Quick ramp-up (~1.5s total)
+
     prog = Math.max(imageProgress, artificialProgress);
     
     if (prog > 100) prog = 100;
@@ -59,7 +59,7 @@ const timer = setInterval(() => {
             }
         }, 1700);
     }
-}, 90); // Slower interval: 60ms → 90ms
+}, 60);
 
 // Fallback: ensure preloader doesn't stay forever
 setTimeout(() => {
@@ -68,4 +68,4 @@ setTimeout(() => {
         pre.style.opacity = '0';
         setTimeout(() => pre.remove(), 800);
     }
-}, 12000); // Max 12 seconds
+}, 6000); // Max 6 seconds
