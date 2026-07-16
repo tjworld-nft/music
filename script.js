@@ -132,14 +132,14 @@ window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 50);
 }, { passive: true });
 
-// Ambient hero video — desktop only, skipped when reduced motion is preferred
+// Ambient hero video — skipped when reduced motion or data saver is on
 function initHeroVideo() {
     const video = document.getElementById('hero-video');
     if (!video) return;
 
     const wantsMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
-    if (!wantsMotion || !isDesktop) return;
+    const savesData = navigator.connection && navigator.connection.saveData;
+    if (!wantsMotion || savesData) return;
 
     video.src = 'image/tj-hero-loop.mp4?v=20260716';
     video.addEventListener('playing', () => video.classList.add('playing'), { once: true });
