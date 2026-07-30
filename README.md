@@ -65,36 +65,71 @@ assets/
 ```javascript
 const albumData = [
     {
-        id: 1,
-        title: "Dive Drive Collection",
-        releaseDate: "2024",
-        coverImage: "assets/album-dive-drive.jpg",
+        // 配信前のアルバム: presave だけを置き、badge / trackCount で
+        // 「Coming Soon」バッジと曲数を出す
+        id: 3,
+        title: "魚歌 - UO-UTA -",
+        releaseDate: "2026年 近日配信",
+        coverImage: "image/uo-uta-cover.jpg",
+        badge: "Coming Soon",
+        trackCount: 19,
         streamingLinks: {
-            spotify: "https://open.spotify.com/intl-ja/album/7e4515POUooa6qcELXusMr",
-            appleMusic: "https://music.apple.com/us/album/dive-drive-collection/1821436814",
-            sunoAI: "https://suno.ai/playlist/tj-dive-drive-collection"
+            presave: "https://distrokid.com/hyperfollow/5a42201/---uo-uta--"
         }
     },
-    // 👇 新しいアルバムを追加
     {
+        // 配信済みのアルバム
         id: 2,
-        title: "Ocean Waves Symphony",
-        releaseDate: "2025",
-        coverImage: "assets/album-ocean-waves.jpg",
+        title: "Certification Symphony",
+        releaseDate: "2025年6月25日",
+        coverImage: "image/Certification Symphony-cover.jpg",
         streamingLinks: {
-            spotify: "https://open.spotify.com/album/your-album-id",
-            appleMusic: "https://music.apple.com/album/your-album-id",
-            sunoAI: "https://suno.ai/playlist/your-playlist"
+            spotify: "https://open.spotify.com/intl-ja/album/2sdUIAIK77Ssz9KQdXlGLN",
+            appleMusic: "https://music.apple.com/jp/album/certification-symphony/1822452513",
+            amazonMusic: "https://music.amazon.co.jp/albums/B0FF4LTJ9Y",
+            sunoAI: "https://suno.com/playlist/888888c4-2fab-47dd-ad43-11410c0ea1eb"
         }
     }
 ];
 ```
 
 ### 新アルバム追加の手順
-1. `assets/` フォルダにアルバムジャケット画像を追加
+1. `image/` フォルダにアルバムジャケット画像を追加（正方形・800px・150KB以下が目安）
 2. `script.js` の `albumData` 配列に新しいオブジェクトを追加
-3. ストリーミングサービスのURLを更新
-4. ページをリフレッシュして確認
+3. `index.html` の以下も更新
+   - `#album-promo`（Latest / New Album のプロモ枠）
+   - `#listen` のアルバムブロック（配信後は Spotify 埋め込みに差し替え）
+   - 構造化データ（`application/ld+json`）の `album` 配列
+4. `style.css?v=` / `script.js?v=` の日付を更新してキャッシュを更新
+5. ページをリフレッシュして確認
+
+### 「魚歌 - UO-UTA -」が配信開始したらやること
+1. `script.js` の該当アルバムから `badge` を削除し、`releaseDate` を実際の配信日に更新
+2. `streamingLinks` の `presave` を `spotify` / `appleMusic` / `amazonMusic` に差し替え
+3. `index.html`
+   - ヒーローの「「魚歌」をプリセーブ」ボタンを Spotify/Apple のアルバムリンクに変更
+   - `#album-promo` のプリセーブCTAを各サービスの「聴く」ボタンに変更、`Coming Soon` リボンを削除
+   - `#listen` の収録曲リストの下に Spotify 埋め込み iframe を追加
+   - 構造化データに `datePublished` を追加
+4. `sitemap.xml` の `lastmod` を更新
+
+## 🌊 ヒーロー演出（three.js + WebGPU）
+
+ヒーローの光の粒・水面のコースティクス・光の柱は `hero-gpu.js` が描いています。
+
+- **描画**: three.js `WebGPURenderer`。WebGPU対応ブラウザではGPUコンピュートシェーダでパーティクルを実際に流体的に動かし、非対応ブラウザでは自動的にWebGL2にフォールバック（この場合は頂点シェーダ内の解析的な動きに切り替わり、見た目はほぼ同じ）
+- **three.js本体**: `vendor/three.webgpu.min.js` + `vendor/three.core.min.js`（v0.185.1・MITライセンス・自前ホスト）。CDNに依存しない。バージョンを上げるときは `npm pack three` で取り出した `build/` の2ファイルを差し替える
+- **読み込み**: `script.js` の `initHeroVisual()` が初回描画後（`requestIdleCallback`）に動的importする。ファーストビューの表示速度には影響しない
+- **段階的フォールバック**: WebGPU → WebGL2 → 動画ヒーロー（`image/tj-hero-loop.mp4`）→ 静止画。GPUが遅い端末では粒の数を自動的に半減させ、それでも重い場合は動画に切り替える
+- **省電力**: ヒーローが画面外・タブが非アクティブのときは描画を停止。`prefers-reduced-motion` や通信量セーバー時はGPU演出も動画も読み込まない
+
+### デバッグ用URLパラメータ
+| パラメータ | 効果 |
+|---|---|
+| `?gl=1` | WebGPUを使わずWebGL2フォールバックを強制（見た目の確認用） |
+| `?gpuhero=off` | GPU演出を止めて従来の動画ヒーローにする |
+
+ブラウザのコンソールでは `window.TJHero` から `backend`（webgpu / webgl2）・`count`（粒の数）・`pulse()`（ソナー波を手動発射）が確認できます。
 
 ## 📤 デプロイ方法
 

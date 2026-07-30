@@ -856,9 +856,9 @@ section {
 /* ===== MUSIC セクション ===== */
 .albums-container.music-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
     gap: 2.5rem;
-    max-width: 860px;
+    max-width: 1140px;
     margin: 0 auto;
 }
 
@@ -1692,4 +1692,285 @@ section {
 .error-home-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 30px rgba(3, 10, 24, 0.45), 0 0 30px rgba(51, 213, 255, 0.5);
+}
+
+/* ============================================================
+   GPU Hero (three.js WebGPU / WebGL2) — hero-gpu.js
+   ============================================================ */
+.hero-gpu {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: block;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+    mix-blend-mode: screen;
+}
+
+.hero-gpu.ready {
+    opacity: 1;
+}
+
+/* The CSS bubble/particle layers are redundant once the GPU scene runs. */
+.gpu-hero-live .hero::before,
+.gpu-hero-live .hero-particles {
+    opacity: 0;
+    transition: opacity 1.2s ease;
+}
+
+.gpu-hero-live .hero-video {
+    display: none;
+}
+
+/* ===== Scroll progress line ===== */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    z-index: 1200;
+    background: var(--accent-grad);
+    box-shadow: 0 0 12px rgba(51, 213, 255, 0.7);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    pointer-events: none;
+}
+
+/* ===== Nav active state ===== */
+.nav-link.active {
+    color: var(--accent);
+}
+
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* ===== Hero presave button ===== */
+.listen-btn.presave-hero {
+    background: var(--accent-grad);
+    color: #04142e;
+    border-color: transparent;
+    box-shadow: 0 8px 26px rgba(3, 10, 24, 0.45), 0 0 26px rgba(51, 213, 255, 0.45);
+}
+
+.listen-btn.presave-hero i {
+    color: #04142e;
+}
+
+.listen-btn.presave-hero:hover {
+    box-shadow: 0 12px 32px rgba(3, 10, 24, 0.5), 0 0 34px rgba(51, 213, 255, 0.65);
+}
+
+/* ===== New album promo ===== */
+.promo-jacket-wrap {
+    position: relative;
+    flex: 0 0 auto;
+    perspective: 900px;
+}
+
+.promo-jacket-wrap .promo-jacket {
+    display: block;
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.promo-jacket-wrap:hover .promo-jacket {
+    box-shadow: 0 20px 46px rgba(0, 0, 0, 0.55), 0 0 34px rgba(51, 213, 255, 0.35);
+}
+
+.promo-ribbon {
+    position: absolute;
+    bottom: 14px;
+    left: -8px;
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #04142e;
+    background: linear-gradient(135deg, #7fe4ff 0%, #33d5ff 100%);
+    padding: 0.36em 0.9em;
+    border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.promo-lead {
+    color: var(--text-dim);
+    font-size: 0.94rem;
+    line-height: 1.95;
+    margin-bottom: 1.6rem;
+}
+
+.promo-buttons .btn.presave.primary {
+    background: var(--accent-grad);
+    color: #04142e;
+    border-color: transparent;
+    font-weight: 800;
+    box-shadow: 0 10px 26px rgba(3, 10, 24, 0.45), 0 0 24px rgba(51, 213, 255, 0.4);
+}
+
+.promo-buttons .btn.presave.primary:hover {
+    box-shadow: 0 14px 32px rgba(3, 10, 24, 0.5), 0 0 32px rgba(51, 213, 255, 0.6);
+}
+
+.promo-buttons .btn.presave.ghost {
+    background: rgba(51, 213, 255, 0.08);
+    border: 1.5px solid var(--line-soft);
+    color: #eaf8ff;
+}
+
+.promo-buttons .btn.presave.ghost:hover {
+    border-color: var(--accent);
+    background: rgba(51, 213, 255, 0.16);
+}
+
+/* ===== Upcoming album block (Listen section) ===== */
+.upcoming-wrap {
+    display: grid;
+    grid-template-columns: minmax(200px, 300px) 1fr;
+    gap: 2.2rem;
+    align-items: start;
+    padding: 1.8rem;
+    border-radius: var(--radius-card);
+    background: var(--card-grad);
+    border: 1px solid var(--line-soft);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.upcoming-cover img {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 0 22px rgba(51, 213, 255, 0.16);
+}
+
+.tracklist {
+    list-style: none;
+    counter-reset: track;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 0.35rem 1.6rem;
+    margin: 0 0 1.6rem;
+    padding: 0;
+}
+
+.tracklist li {
+    counter-increment: track;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 0.7em;
+    padding: 0.42em 0;
+    border-bottom: 1px solid rgba(51, 213, 255, 0.1);
+    color: #eaf8ff;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.tracklist li::before {
+    content: counter(track, decimal-leading-zero);
+    font-family: var(--font-display);
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--accent);
+    opacity: 0.8;
+    flex: 0 0 auto;
+}
+
+.tracklist li:hover {
+    color: #fff;
+    transform: translateX(3px);
+}
+
+.suno-btn.presave-btn {
+    background: var(--accent-grad);
+    color: #04142e;
+    border-color: transparent;
+    font-weight: 800;
+}
+
+.suno-btn.presave-btn i {
+    color: #04142e;
+}
+
+/* ===== Album card: badge, track count, tilt ===== */
+.album-card.tiltable,
+.partner-card.tiltable {
+    perspective: 900px;
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.album-card.tiltable:hover,
+.partner-card.tiltable:hover {
+    transform: translateY(-8px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+}
+
+.album-cover {
+    position: relative;
+}
+
+.album-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #04142e;
+    background: linear-gradient(135deg, #7fe4ff 0%, #33d5ff 100%);
+    padding: 0.34em 0.8em;
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.album-tracks {
+    color: var(--accent);
+}
+
+.streaming-link.presave-link {
+    background: var(--accent-grad);
+    color: #04142e;
+    border-color: transparent;
+    font-weight: 800;
+}
+
+.streaming-link.presave-link i {
+    color: #04142e;
+}
+
+@media (max-width: 767px) {
+    .upcoming-wrap {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.2rem;
+    }
+
+    .upcoming-cover {
+        max-width: 280px;
+        margin: 0 auto;
+    }
+
+    .tracklist {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-gpu {
+        display: none;
+    }
+
+    .scroll-progress {
+        transition: none;
+    }
 }
