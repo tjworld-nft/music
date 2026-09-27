@@ -7,13 +7,33 @@ DirectoryIndex index.html
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 
+<IfModule mod_mime.c>
+  AddType audio/mp4 .m4a
+  AddType image/webp .webp
+  AddType application/json .json
+  AddType text/javascript .js
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
 <IfModule mod_headers.c>
   Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
   Header set X-Frame-Options "SAMEORIGIN"
   Header set X-Content-Type-Options "nosniff"
-  Header set X-XSS-Protection "1; mode=block"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
-  Header set Permissions-Policy "accelerometer=(), geolocation=(), microphone=()"
+  Header set Permissions-Policy "accelerometer=(self), gyroscope=(self), geolocation=(), microphone=(), camera=()"
+  # 画像・音声・CSS・JSは ?v=日付 で版を切り替えているので長めにキャッシュ（HTMLはキャッシュしない）
+  <FilesMatch "\.(webp|jpe?g|png|ico|m4a|woff2?)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <FilesMatch "\.(css|js|json)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
 </IfModule>
 
 ErrorDocument 404 /404.html
